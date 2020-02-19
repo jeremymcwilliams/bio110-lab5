@@ -15,6 +15,11 @@ Link to this page: http://bit.ly/bio110-lab5
 
 ### Loading the workshop content:
 
+Before doing anything, make sure you close any current projects in RStudio:
+
+![close project](close-project.png "Close Project")
+
+
 in console (lower left-hand corner):
 * library(usethis)
 * use_course("https://github.com/jeremymcwilliams/bio110-lab5/archive/0.1.zip")
