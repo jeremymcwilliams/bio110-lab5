@@ -48,11 +48,16 @@ Load your data file to a variable called myData using the read_csv() function, a
 # for example,copy and paste the following command below, using your .csv file name in "":
 # myData<-read_csv("myData.csv")
 
+treated<-read_csv("treated.csv")
+
+untreated<-read_csv("untreated.csv")
+
 
 
 # confirm by printing your variable
 
-myData
+treated
+untreated
 
 ```
 
@@ -87,9 +92,12 @@ Go ahead and try the group_by/summarise technique with your data, by copying and
 ```{r}
 # create a new data frame variable, adding columns for mean, standard deviation, and number of measurements 
 
+treatedStats<-treated %>% group_by(time) %>% summarise (Average=mean(length), StandardDeviation=sd(length), n=n())
 
+untreatedStats<-untreated %>% group_by(time) %>% summarise (Average=mean(length), StandardDeviation=sd(length), n=n())
 # print the variable to check your success
-myStats
+treatedStats
+untreatedStats
 
 ```
 
@@ -109,12 +117,15 @@ In the formulas above, Average, StandardDeviation, and n are all variables that 
 
 # create a new data frame variable, adding columns for mean, standard deviation, number of measurements, upperCI, and lowerCI
 
-#myStats<-myData %>% group_by(time) %>% summarise (Average=mean(length), StandardDeviation=sd(length), n=n(), lowerCI=Average-((qnorm(0.975)*StandardDeviation)/sqrt(n)), upperCI=Average+((qnorm(0.975)*StandardDeviation)/sqrt(n)))
+treatedStats<-treated %>% group_by(time) %>% summarise (Average=mean(length), StandardDeviation=sd(length), n=n(), upperCI=Average+((qnorm(0.975)*StandardDeviation)/sqrt(n)), lowerCI=Average-((qnorm(0.975)*StandardDeviation)/sqrt(n)))
+
+untreatedStats<-untreated %>% group_by(time) %>% summarise (Average=mean(length), StandardDeviation=sd(length), n=n(), upperCI=Average+((qnorm(0.975)*StandardDeviation)/sqrt(n)), lowerCI=Average-((qnorm(0.975)*StandardDeviation)/sqrt(n)))
 
 
 # print the variable to check your success
 
-myStats
+treatedStats
+untreatedStats
 
 
 
@@ -145,7 +156,7 @@ ggplot(data=myStats, mapping=aes(x=time, y=Average))+geom_point()
 ```{r}
 
 # Generate a point plot of your data below, with time on the x-axis, and average on the y-axis, using geom_point()
-# ggplot(data=myStats, mapping=aes(x=time, y=Average))+geom_point()
+ ggplot()+geom_point(data=treatedStats, mapping=aes(x=time, y=Average))+geom_point(data=untreatedStats, mapping=aes(x=time, y=Average))
 
 
 
@@ -158,9 +169,12 @@ Now add the error bars, using geom_error(). Your ymin and ymax values should be 
 ```{r}
 
 # Generate your plot with geom_point(), and add error bars using geom_errorbar() 
-# ggplot(data=myStats, mapping=aes(x=time,y=Average))+geom_point()+geom_errorbar(mapping=aes(ymin=lowerCI, ymax=upperCI), width=5)
 
 
+ ggplot()+geom_point(data=treatedStats, mapping=aes(x=time, y=Average), shape = 15, color = "black", size=5)+
+  geom_errorbar(data=treatedStats, mapping=aes(x=time, ymin=lowerCI, ymax=upperCI), width=5)+
+  geom_point(data=untreatedStats, mapping=aes(x=time, y=Average), shape=17, color="grey", size=5)+
+  geom_errorbar(data=untreatedStats, mapping=aes(x=time, ymin=lowerCI, ymax=upperCI), width=5)
 
 
 
@@ -175,7 +189,12 @@ Now let's add the line connecting the dots using geom_path(). We can do this by 
 # Add the line to the graph:
 # ggplot(data=myStats, mapping=aes(x=time,y=Average))+geom_point()+geom_errorbar(mapping=aes(ymin=lowerCI, ymax=upperCI), width=5)+geom_path(mapping=aes(x=time, y=Average))
 
-
+ ggplot()+geom_point(data=treatedStats, mapping=aes(x=time, y=Average), shape = 15, color = "black", size=5)+
+  geom_errorbar(data=treatedStats, mapping=aes(x=time, ymin=lowerCI, ymax=upperCI), width=5)+
+  geom_path(data=treatedStats, mapping=aes(x=time, y=Average))+
+  geom_point(data=untreatedStats, mapping=aes(x=time, y=Average), shape=17, color="grey", size=5)+
+  geom_errorbar(data=untreatedStats, mapping=aes(x=time, ymin=lowerCI, ymax=upperCI), width=5, color="grey")+
+  geom_path(data=untreatedStats, mapping=aes(x=time, y=Average), color="grey")
 
 ```
 
