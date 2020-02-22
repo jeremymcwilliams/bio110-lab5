@@ -13,11 +13,20 @@ output:
 
 **IMPORTANT** As a general rule of coding, when trying out new code, NEVER directly edit the example code.  ALWAYS copy and paste and then edit the copied code to ensure that the example code is not altered or accidentally deleted.
 
+
+
+
 The goals of this tutorial are to:
-* import your data in a spreadsheet to R Studio
-* calculate the mean of your measured flagella lengths at each time point
-* calculate the 95% confidence intervals of the mean flagella length at each time point
-* plot the means as points with error bars on a graph
+* import your two data sets (treated, and untreated) from spreadsheets to R Studio
+* calculate the means of your measured flagella lengths at each time point (both data sets)
+* calculate the 95% confidence intervals of the mean flagella length at each time point (both data sets)
+* plot the means as points with error bars, 
+
+This lab will be very similar to the last lab. The main difference is that you'll have two data sets instead of one, and you'll make a single plot containing both sets.
+
+
+
+You should have two 
 
 Now that you have collected measurements for 15 Chlamydomonas flagella per time point, you must import your spreadsheet of data to R Studio. The format of the columns of data is important, as well as the titles of the columns of data. 
 
@@ -58,6 +67,8 @@ untreated<-read_csv("untreated.csv")
 
 treated
 untreated
+
+
 
 ```
 
@@ -156,7 +167,9 @@ ggplot(data=myStats, mapping=aes(x=time, y=Average))+geom_point()
 ```{r}
 
 # Generate a point plot of your data below, with time on the x-axis, and average on the y-axis, using geom_point()
- ggplot()+geom_point(data=treatedStats, mapping=aes(x=time, y=Average))+geom_point(data=untreatedStats, mapping=aes(x=time, y=Average))
+ ggplot()+
+  geom_point(data=treatedStats, mapping=aes(x=time, y=Average, shape="Treated"), size=5)+
+  geom_point(data=untreatedStats, mapping=aes(x=time, y=Average, shape="Untreated"), size=5)
 
 
 
@@ -170,11 +183,12 @@ Now add the error bars, using geom_error(). Your ymin and ymax values should be 
 
 # Generate your plot with geom_point(), and add error bars using geom_errorbar() 
 
-
- ggplot()+geom_point(data=treatedStats, mapping=aes(x=time, y=Average), shape = 15, color = "black", size=5)+
+ ggplot()+
+  geom_point(data=treatedStats, mapping=aes(x=time, y=Average, shape="Treated"), size=5)+
   geom_errorbar(data=treatedStats, mapping=aes(x=time, ymin=lowerCI, ymax=upperCI), width=5)+
-  geom_point(data=untreatedStats, mapping=aes(x=time, y=Average), shape=17, color="grey", size=5)+
+  geom_point(data=untreatedStats, mapping=aes(x=time, y=Average, shape="Untreated"), size=5)+
   geom_errorbar(data=untreatedStats, mapping=aes(x=time, ymin=lowerCI, ymax=upperCI), width=5)
+
 
 
 
@@ -189,14 +203,29 @@ Now let's add the line connecting the dots using geom_path(). We can do this by 
 # Add the line to the graph:
 # ggplot(data=myStats, mapping=aes(x=time,y=Average))+geom_point()+geom_errorbar(mapping=aes(ymin=lowerCI, ymax=upperCI), width=5)+geom_path(mapping=aes(x=time, y=Average))
 
- ggplot()+geom_point(data=treatedStats, mapping=aes(x=time, y=Average), shape = 15, color = "black", size=5)+
+#colors <- c("Treated" = "black", "Untreated" = "blue")
+
+
+ ggplot()+
+  geom_point(data=treatedStats, mapping=aes(x=time, y=Average, shape="Treated"), size=5)+
   geom_errorbar(data=treatedStats, mapping=aes(x=time, ymin=lowerCI, ymax=upperCI), width=5)+
   geom_path(data=treatedStats, mapping=aes(x=time, y=Average))+
-  geom_point(data=untreatedStats, mapping=aes(x=time, y=Average), shape=17, color="grey", size=5)+
-  geom_errorbar(data=untreatedStats, mapping=aes(x=time, ymin=lowerCI, ymax=upperCI), width=5, color="grey")+
-  geom_path(data=untreatedStats, mapping=aes(x=time, y=Average), color="grey")
+  geom_point(data=untreatedStats, mapping=aes(x=time, y=Average, shape="Untreated"),   size=5)+
+  geom_errorbar(data=untreatedStats, mapping=aes(x=time, ymin=lowerCI, ymax=upperCI), width=5)+
+  geom_path(data=untreatedStats, mapping=aes(x=time, y=Average))+
+  labs(x = "Average",y = "time(seconds)",shape="My Legend", title="My plot")+
+  xlim(c(0,90))+
+  ylim(c(0,8))
 
+  
 ```
+
+
+
+
+
+
+
 
 
 Now we can clean up the plot by adjusting our x- and y- axes with the xlim() and ylim() functions. Each function takes a minimum and maximum (e.g. +ylim(0, 10)).  Make sure your upper limit is high enough to include all data points and error bars.
