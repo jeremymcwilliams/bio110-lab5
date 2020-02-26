@@ -31,7 +31,9 @@ For each dataset you should have two columns of data titled, time and length, wi
 
 Once you have checked that your spreadsheets follow these basic rules, save each as a .csv file in your BIO 110 folder on the desktop. The file should have a short simple name, such as your group's initials and treated or untreated.
 
-First upload your .csv files to R Studio in the bottom right window using the Upload button.  Browse to locate your files and click Upload.  Make sure they load into the bio110-chlamyindproject folder.
+First upload your .csv files to R Studio in the bottom right window using the Upload button.  Browse to locate your files and click Upload.  Make sure they load into the bio110-chlamyindproject folder. 
+
+**NOTE - Make sure you DO NOT open your csv files in Mac "Numbers". It will screw up your data.
 
 Before writing any R code, we'll need to load some R packages in order to use some of the specific functions we want.  Run the code chunk below to make sure these functions are available to your environment:
 
@@ -48,7 +50,7 @@ library(tidyverse)
 
 Just like last week, you'll want to load your data as data frames into R by assigning them to variables. You should create one for each data set (e.g. "treated" and "untreated").
 
-Load your data file to a variable called myData using the read_csv() function, and print your variable to confirm:
+Load your treated data file to a variable called treated using the read_csv() function. Load your untreated data file to a variable called untreated, and then print both variables to confirm. Be aware that when you print your stats, they'll be displayed in the order that they are printed.
 
 ```{r}
 # for example,copy and paste the following command below, using your .csv file name in "":
@@ -68,21 +70,20 @@ Load your data file to a variable called myData using the read_csv() function, a
 ```
 
 
-Just like the last lab, we're going to use "groub_by" with "summarise" to generate statistical measures (mean, standard deviation, count, and upper and lower confidence interval limits). This time we'll need to apply these techniques to both data sets.
+Just like the last lab, we're going to use "groub_by" with "summarise" to generate statistical measures (mean, standard deviation, count, and upper and lower confidence interval limits). This time we'll need to apply these techniques to both data sets. 
 
 To refresh, here's the command for doing this:
 
-myStats<-myData %>% group_by(time) %>% summarise (Average=mean(length), StandardDeviation=sd(length), n=n(), upperCI=Average+((qnorm(0.975)*StandardDeviation)/sqrt(n)), lowerCI=Average-((qnorm(0.975)*StandardDeviation)/sqrt(n)))
+treatedStats<-treated %>% group_by(time) %>% summarise (Average=mean(length), StandardDeviation=sd(length), n=n(), upperCI=Average+((qnorm(0.975)*StandardDeviation)/sqrt(n)), lowerCI=Average-((qnorm(0.975)*StandardDeviation)/sqrt(n)))
 
-And again, here's some explanation on this code:
 
-* I'm starting with my loaded data (myData)
+* I'm starting with my loaded data (treated)
 
-* I'm using the %>% command to pass myData to the group_by function, and indicating that the data should be grouped by the "time" column header.
+* I'm using the %>% command to pass "treated" to the group_by function, and indicating that the data should be grouped by the "time" column header.
 
-* Then, I'm "piping" this to the "summarise" function, which lets me create columns in my new data frame "myStats" based upon formulas. In this case, I'm creating a column called "Average" and setting it equal to the mean of the grouped "length" column from myData. I'm also creating the column "StandardDeviation", and setting it equal to the standard deviation of the grouped data, using the sd() function. I'm then creating the column "n", which uses the n() function to count the number of measurements in each group. Finally I'm adding upperCI and lowerCI using formulas.
+* Then, I'm "piping" this to the "summarise" function, which lets me create columns in my new data frame "treatedStats" based upon formulas. In this case, I'm creating a column called "Average" and setting it equal to the mean of the grouped "length" column from treated. I'm also creating the column "StandardDeviation", and setting it equal to the standard deviation of the grouped data, using the sd() function. I'm then creating the column "n", which uses the n() function to count the number of measurements in each group. Finally I'm adding upperCI and lowerCI using formulas.
 
-So the new "myStats" data frame should have a structure that looks like this (the #'s are just placeholders for real computed values):
+So the new "treatedStats" data frame should have a structure that looks like this (the #'s are just placeholders for real computed values):
 
 time, Average, StandardDeviation, n, upperCI, lowerCI
 25, #, #, #, #, #
@@ -94,7 +95,7 @@ time, Average, StandardDeviation, n, upperCI, lowerCI
 This new data frame structured this way is the precursor for creating the plot that we want that shows the differences in groups.
 
 
-Run the same code for both your data sets, and then print them out to confirm:
+Run the same code for both your data sets, and then print them out to confirm. Be aware that when you print your stats, they'll be displayed in the order that they are printed.
 
 ```{r}
 
@@ -130,15 +131,15 @@ The best way to approach this is to try a little bit at a time, test the output,
 
 ****At this point it's worth explaining one key point about how ggplot works. Previously, we could create charts with code that looked like this, for example:
 
-ggplot(data=myStats, mapping=aes(x=time, y=Average))+geom_point()
+ggplot(data=treatedStats, mapping=aes(x=time, y=Average))+geom_point()
 
 In that example, the "data" and "mapping" parameters are in the initial ggplot function, which makes them GLOBAL. This means that they apply to any functions that come after it, like geom_point(), etc. Since we want to create a plot with two different data sets, this approach would be problematic. We want one geom_point() function to have one dataset, and another geom_point() function to use a different dataset. Fortunately, the same plot can be written like this:
 
-ggplot()+geom_point(data=myStats, mapping=aes(x=time, y=Average))
+ggplot()+geom_point(data=treatedStats, mapping=aes(x=time, y=Average))
 
 This makes the data and mapping parameters specific to just that geom_point() function....which allows us to use more than one data set, like this:
 
-ggplot()+geom_point(data=myStats, mapping=aes(x=time, y=Average))+geom_point(data=anotherDataSet, mapping=aes(x=time, y=Average))
+ggplot()+geom_point(data=treatedStats, mapping=aes(x=time, y=Average))+geom_point(data=anotherDataSet, mapping=aes(x=time, y=Average))
 
 
 
@@ -148,7 +149,7 @@ To start, try just generating a plot with points. In the example below, the "sha
 ```{r}
 
 # Generate a point plot of your data below, with time on the x-axis, and average on the y-axis, using geom_point()
-# ggplot()+geom_point(data=treatedStats, mapping=aes(x=time, y=Average, shape="Label 1"), size=5)+geom_point(data=untreatedStats, mapping=aes(x=time, y=Average, shape="Label 2"), size=5)
+# ggplot()+geom_point(data=treatedStats, mapping=aes(x=time, y=Average, shape="Treated"), size=5)+geom_point(data=untreatedStats, mapping=aes(x=time, y=Average, shape="Untreated"), size=5)
 
 
 
