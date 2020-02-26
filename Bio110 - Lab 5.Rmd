@@ -54,16 +54,14 @@ Load your data file to a variable called myData using the read_csv() function, a
 # for example,copy and paste the following command below, using your .csv file name in "":
 # treated<-read_csv("treated.csv")
 # untreated<-read_csv("untreated.csv")
-treated<-read_csv("treated.csv")
 
-untreated<-read_csv("untreated.csv")
 
 
 
 # confirm by printing your variable
 
-treated
-untreated
+#treated
+#untreated
 
 
 
@@ -164,11 +162,11 @@ Now add the error bars by chaining geom_errorbar() functions to the last example
 
 # Generate your plot with geom_point(), and add error bars using geom_errorbar()
 
-ggplot()+
-geom_point(data=treatedStats, mapping=aes(x=time, y=Average, shape="Treated"), size=5)+
-geom_errorbar(data=treatedStats, mapping=aes(x=time, ymin=lowerCI, ymax=upperCI), width=5)+
-geom_point(data=untreatedStats, mapping=aes(x=time, y=Average, shape="Untreated"), size=5)+
-geom_errorbar(data=untreatedStats, mapping=aes(x=time, ymin=lowerCI, ymax=upperCI), width=5)
+#ggplot()+
+#geom_point(data=treatedStats, mapping=aes(x=time, y=Average, shape="Treated"), size=5)+
+#geom_errorbar(data=treatedStats, mapping=aes(x=time, ymin=lowerCI, ymax=upperCI), width=5)+
+#geom_point(data=untreatedStats, mapping=aes(x=time, y=Average, shape="Untreated"), size=5)+
+#geom_errorbar(data=untreatedStats, mapping=aes(x=time, ymin=lowerCI, ymax=upperCI), width=5)
 
 
 
@@ -185,13 +183,13 @@ Now use the same technique to add connecting lines with geom_path():
 # Add the lines to the graph:
 
 
-ggplot()+
-geom_point(data=treatedStats, mapping=aes(x=time, y=Average, shape="Treated"), size=5)+
-geom_errorbar(data=treatedStats, mapping=aes(x=time, ymin=lowerCI, ymax=upperCI), width=5)+
-geom_path(data=treatedStats, mapping=aes(x=time, y=Average))+
-geom_point(data=untreatedStats, mapping=aes(x=time, y=Average, shape="Untreated"),   size=5)+
-geom_errorbar(data=untreatedStats, mapping=aes(x=time, ymin=lowerCI, ymax=upperCI), width=5)+
-geom_path(data=untreatedStats, mapping=aes(x=time, y=Average))
+#ggplot()+
+#geom_point(data=treatedStats, mapping=aes(x=time, y=Average, shape="Treated"), size=5)+
+#geom_errorbar(data=treatedStats, mapping=aes(x=time, ymin=lowerCI, ymax=upperCI), width=5)+
+#geom_path(data=treatedStats, mapping=aes(x=time, y=Average))+
+#geom_point(data=untreatedStats, mapping=aes(x=time, y=Average, shape="Untreated"),   size=5)+
+#geom_errorbar(data=untreatedStats, mapping=aes(x=time, ymin=lowerCI, ymax=upperCI), width=5)+
+#geom_path(data=untreatedStats, mapping=aes(x=time, y=Average))
 
 
 
@@ -207,13 +205,13 @@ Now we can clean up the plot by adjusting our x- and y- axes with the xlim() and
 
 # Adjust your axes with the xlim and ylim functions. Edit the values those functions below to improve your plot.
 
-ggplot()+
-geom_point(data=treatedStats, mapping=aes(x=time, y=Average, shape="Treated"), size=5)+
-geom_errorbar(data=treatedStats, mapping=aes(x=time, ymin=lowerCI, ymax=upperCI), width=5)+
-geom_path(data=treatedStats, mapping=aes(x=time, y=Average))+
-geom_point(data=untreatedStats, mapping=aes(x=time, y=Average, shape="Untreated"),   size=5)+
-geom_errorbar(data=untreatedStats, mapping=aes(x=time, ymin=lowerCI, ymax=upperCI), width=5)+geom_path(data=untreatedStats, mapping=aes(x=time, y=Average))+
-xlim(c(0,90))+ylim(c(0,8))
+#ggplot()+
+#geom_point(data=treatedStats, mapping=aes(x=time, y=Average, shape="Treated"), size=5)+
+#geom_errorbar(data=treatedStats, mapping=aes(x=time, ymin=lowerCI, ymax=upperCI), width=5)+
+#geom_path(data=treatedStats, mapping=aes(x=time, y=Average))+
+#geom_point(data=untreatedStats, mapping=aes(x=time, y=Average, shape="Untreated"),   size=5)+
+#geom_errorbar(data=untreatedStats, mapping=aes(x=time, ymin=lowerCI, ymax=upperCI), width=5)+geom_path(data=untreatedStats, mapping=aes(x=time, y=Average))+
+#xlim(c(0,90))+ylim(c(0,8))
 
 
 
@@ -228,14 +226,14 @@ Finally, add some labels using the labs() function. You can overwrite the "shape
 # Update the values in the labs() function below.  You can also rename "Treated" and "Untreated" labels after shape=.
 
 #cut and paste your previous code and add: +labs(x="my x label", y="my y axis label") filling in the appropriate labels for your axes
-ggplot()+
-geom_point(data=treatedStats, mapping=aes(x=time, y=Average, shape="Treated"), size=5)+
-geom_errorbar(data=treatedStats, mapping=aes(x=time, ymin=lowerCI, ymax=upperCI), width=5)+
-geom_path(data=treatedStats, mapping=aes(x=time, y=Average))+
-geom_point(data=untreatedStats, mapping=aes(x=time, y=Average, shape="Untreated"),   size=5)+
-geom_errorbar(data=untreatedStats, mapping=aes(x=time, ymin=lowerCI, ymax=upperCI), width=5)+geom_path(data=untreatedStats, mapping=aes(x=time, y=Average))+
-xlim(c(0,90))+ylim(c(0,8))+
-labs(x = "Your x axis",y = "Your y axis",shape="Legend")
+#ggplot()+
+#geom_point(data=treatedStats, mapping=aes(x=time, y=Average, shape="Treated"), size=5)+
+#geom_errorbar(data=treatedStats, mapping=aes(x=time, ymin=lowerCI, ymax=upperCI), width=5)+
+#geom_path(data=treatedStats, mapping=aes(x=time, y=Average))+
+#geom_point(data=untreatedStats, mapping=aes(x=time, y=Average, shape="Untreated"),   size=5)+
+#geom_errorbar(data=untreatedStats, mapping=aes(x=time, ymin=lowerCI, ymax=upperCI), width=5)+geom_path(data=untreatedStats, mapping=aes(x=time, y=Average))+
+#xlim(c(0,90))+ylim(c(0,8))+
+#labs(x = "Your x axis",y = "Your y axis",shape="Legend")
 
 ```
 
