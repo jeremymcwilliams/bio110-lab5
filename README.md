@@ -22,8 +22,8 @@ Before doing anything, make sure you close any current projects in RStudio:
 
 in console (lower left-hand corner):
 * library(usethis)
-* use_course("https://github.com/jeremymcwilliams/bio110-lab5/archive/0.5.zip")
+* use_course("https://github.com/jeremymcwilliams/bio110-lab5/archive/0.6.zip")
 
 After running the command above, you'll be prompted whether to download to your current directory. Go ahead and answer in the affirmative (you'll be presented with variations on "yes"). Once the course files download, you'll be prompted as to whether to delete the zip file. Again, answer in the affirmative. Once you do, click "Save", and your window will refresh to a new R session.  
 
-To get started, click "Bio110 - Week 4 Lab.Rmd" in the files window, and then minimize the console window. 
+To get started, click "Bio110 - Lab 5.Rmd" in the files window, and then minimize the console window. 

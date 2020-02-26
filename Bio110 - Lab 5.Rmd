@@ -219,7 +219,7 @@ Now we can clean up the plot by adjusting our x- and y- axes with the xlim() and
 ```
 
 
-Finally, add some labels using the labs() function. You can overwrite the "shape" title on the legend by using "shape='my title'"
+Finally, add some labels using the labs() function. You can overwrite the "shape" title on the legend by using shape='my title'
 
 ```{r}
 
