@@ -46,14 +46,14 @@ library(tidyverse)
 ```
 
 
-Just like last week, you'll want to load your data as a data frame into R by assigning it to a variable.
+Just like last week, you'll want to load your data as data frames into R by assigning them to variables. You should create one for each data set (e.g. "treated" and "untreated").
 
 Load your data file to a variable called myData using the read_csv() function, and print your variable to confirm:
 
 ```{r}
 # for example,copy and paste the following command below, using your .csv file name in "":
-# myData<-read_csv("myData.csv")
-
+# treated<-read_csv("treated.csv")
+# untreated<-read_csv("untreated.csv")
 treated<-read_csv("treated.csv")
 
 untreated<-read_csv("untreated.csv")
@@ -70,79 +70,57 @@ untreated
 ```
 
 
-Our end goal is to plot the mean of each measurement with 95% confidence interval bars, grouped by each time interval (e.g. all the measurements at 25, 40, 55, etc.). As such we're going to use some new coding strategies to get our data in the form we want.
+Just like the last lab, we're going to use "groub_by" with "summarise" to generate statistical measures (mean, standard deviation, count, and upper and lower confidence interval limits). This time we'll need to apply these techniques to both data sets.
 
-One common approach to this is to use the "group_by" function in tandem with the "summarise" function. Furthermore, we're going to use the R "pipe" operator %>%, which is used to pass data to new functions. Here's an example command:
+To refresh, here's the command for doing this:
 
-myStats<-myData %>% group_by(time) %>% summarise (Average=mean(length), StandardDeviation=sd(length), n=n())
+myStats<-myData %>% group_by(time) %>% summarise (Average=mean(length), StandardDeviation=sd(length), n=n(), upperCI=Average+((qnorm(0.975)*StandardDeviation)/sqrt(n)), lowerCI=Average-((qnorm(0.975)*StandardDeviation)/sqrt(n)))
 
-Let's analyze what's happening here to create the new data frame myStats
+And again, here's some explanation on this code:
 
-I'm starting with my loaded data (myData)
+* I'm starting with my loaded data (myData)
 
-I'm using the %>% command to pass myData to the group_by function, and indicating that the data should be grouped by the "time" column header.
+* I'm using the %>% command to pass myData to the group_by function, and indicating that the data should be grouped by the "time" column header.
 
-Then, I'm "piping" this to the "summarise" function, which lets me create columns in my new data frame "myStats" based upon formulas. In this case, I'm creating a column called "Average" and setting it equal to the mean of the grouped "length" column from myData. I'm also creating the column "StandardDeviation", and setting it equal to the standard deviation of the grouped data, using the sd() function. Finally I'm creating the column "n", which uses the n() function to count the number of measurements in each group.
+* Then, I'm "piping" this to the "summarise" function, which lets me create columns in my new data frame "myStats" based upon formulas. In this case, I'm creating a column called "Average" and setting it equal to the mean of the grouped "length" column from myData. I'm also creating the column "StandardDeviation", and setting it equal to the standard deviation of the grouped data, using the sd() function. I'm then creating the column "n", which uses the n() function to count the number of measurements in each group. Finally I'm adding upperCI and lowerCI using formulas.
 
 So the new "myStats" data frame should have a structure that looks like this (the #'s are just placeholders for real computed values):
 
-time, Average, StandardDeviation, n
-25, #, #, #
-40, #, #, #
-55, #, #, #
-70, #, #, #
-85, #, #, #
+time, Average, StandardDeviation, n, upperCI, lowerCI
+25, #, #, #, #, #
+40, #, #, #, #, #
+55, #, #, #, #, #
+70, #, #, #, #, #
+85, #, #, #, #, #
 
 This new data frame structured this way is the precursor for creating the plot that we want that shows the differences in groups.
 
-Go ahead and try the group_by/summarise technique with your data, by copying and pasting the code in line 64 to line 89, then run the code block. You may need to edit the code if your column titles do not exactly match, time and length.
 
-```{r}
-# create a new data frame variable, adding columns for mean, standard deviation, and number of measurements
-
-treatedStats<-treated %>% group_by(time) %>% summarise (Average=mean(length), StandardDeviation=sd(length), n=n())
-
-untreatedStats<-untreated %>% group_by(time) %>% summarise (Average=mean(length), StandardDeviation=sd(length), n=n())
-# print the variable to check your success
-treatedStats
-untreatedStats
-
-```
-
-
-The grouped data frame we just created is pretty good, but we need to add the upper and lower limits of the 95% confidence interval for our plot error bars. Here's the formula for computing upper- and lower- confidence interval values:
-
-upperCI<-Average+((qnorm(0.975)*StandardDeviation)/sqrt(n))
-
-lowerCI<-Average-((qnorm(0.975)*StandardDeviation)/sqrt(n))
-
-In the formulas above, Average, StandardDeviation, and n are all variables that could be calculated in the "summarise" function used earlier. In the code block below, try updating your group_by/summarise code from earlier to add lowerCI and upperCI:
-
-
-
+Run the same code for both your data sets, and then print them out to confirm:
 
 ```{r}
 
-# create a new data frame variable, adding columns for mean, standard deviation, number of measurements, upperCI, and lowerCI
+# for treated
 
-treatedStats<-treated %>% group_by(time) %>% summarise (Average=mean(length), StandardDeviation=sd(length), n=n(), upperCI=Average+((qnorm(0.975)*StandardDeviation)/sqrt(n)), lowerCI=Average-((qnorm(0.975)*StandardDeviation)/sqrt(n)))
+#treatedStats<-treated %>% group_by(time) %>% summarise (Average=mean(length), StandardDeviation=sd(length), n=n(), upperCI=Average+((qnorm(0.975)*StandardDeviation)/sqrt(n)), lowerCI=Average-((qnorm(0.975)*StandardDeviation)/sqrt(n)))
 
-untreatedStats<-untreated %>% group_by(time) %>% summarise (Average=mean(length), StandardDeviation=sd(length), n=n(), upperCI=Average+((qnorm(0.975)*StandardDeviation)/sqrt(n)), lowerCI=Average-((qnorm(0.975)*StandardDeviation)/sqrt(n)))
+# for untreated
+
+#untreatedStats<-untreated %>% group_by(time) %>% summarise (Average=mean(length), StandardDeviation=sd(length), n=n(), upperCI=Average+((qnorm(0.975)*StandardDeviation)/sqrt(n)), lowerCI=Average-((qnorm(0.975)*StandardDeviation)/sqrt(n)))
 
 
-# print the variable to check your success
 
-treatedStats
-untreatedStats
+# now print both
 
+#treatedStats
+#untreatedStats
 
 
 ```
 
 
 
-
-Now with the data in this format, we should be able to create a visualization. Here are the characteristics we want:
+Now with our data sets in this format, we should be able to create a visualization. Here are the characteristics we want:
 
 a point plotted for each group
 Time on the x-axis
@@ -150,23 +128,29 @@ Average length on the y-axis
 Error bars for each point, showing the 95% confidence interval
 A line through each point
 
-
 The best way to approach this is to try a little bit at a time, test the output, add a little more, and test again, etc.
 
-To start, try just generating a plot with points. You'll want to use ggplot, with this general format:
-
+****At this point it's worth explaining one key point about how ggplot works. Previously, we could create charts with code that looked like this, for example:
 
 ggplot(data=myStats, mapping=aes(x=time, y=Average))+geom_point()
 
-...where myStats is your new data set (after running the groub_by/summarise code), time is your column header for the time group, and Average is the column header for the mean.
+In that example, the "data" and "mapping" parameters are in the initial ggplot function, which makes them GLOBAL. This means that they apply to any functions that come after it, like geom_point(), etc. Since we want to create a plot with two different data sets, this approach would be problematic. We want one geom_point() function to have one dataset, and another geom_point() function to use a different dataset. Fortunately, the same plot can be written like this:
+
+ggplot()+geom_point(data=myStats, mapping=aes(x=time, y=Average))
+
+This makes the data and mapping parameters specific to just that geom_point() function....which allows us to use more than one data set, like this:
+
+ggplot()+geom_point(data=myStats, mapping=aes(x=time, y=Average))+geom_point(data=anotherDataSet, mapping=aes(x=time, y=Average))
+
+
+
+To start, try just generating a plot with points. In the example below, the "shape" parameter tells ggplot to automatically assign a shape to a point, and then use it in a legend.
 
 
 ```{r}
 
 # Generate a point plot of your data below, with time on the x-axis, and average on the y-axis, using geom_point()
-ggplot()+
-geom_point(data=treatedStats, mapping=aes(x=time, y=Average, shape="Treated"), size=5)+
-geom_point(data=untreatedStats, mapping=aes(x=time, y=Average, shape="Untreated"), size=5)
+# ggplot()+geom_point(data=treatedStats, mapping=aes(x=time, y=Average, shape="Label 1"), size=5)+geom_point(data=untreatedStats, mapping=aes(x=time, y=Average, shape="Label 2"), size=5)
 
 
 
@@ -174,7 +158,7 @@ geom_point(data=untreatedStats, mapping=aes(x=time, y=Average, shape="Untreated"
 ```
 
 
-Now add the error bars, using geom_error(). Your ymin and ymax values should be your calculated lower and upper 95% confidence interval values, respectively:
+Now add the error bars by chaining geom_errorbar() functions to the last example. And just like before, you'll need to put the data and mapping parameters in the geom_errorbar() functions, so it knows which data to use:
 
 ```{r}
 
@@ -193,14 +177,12 @@ geom_errorbar(data=untreatedStats, mapping=aes(x=time, ymin=lowerCI, ymax=upperC
 ```
 
 
-Now let's add the line connecting the dots using geom_path(). We can do this by appending  +geom_path(mapping=aes(x=time, y=Average)).
+Now use the same technique to add connecting lines with geom_path():
+
 
 ```{r}
 
-# Add the line to the graph:
-# ggplot(data=myStats, mapping=aes(x=time,y=Average))+geom_point()+geom_errorbar(mapping=aes(ymin=lowerCI, ymax=upperCI), width=5)+geom_path(mapping=aes(x=time, y=Average))
-
-#colors <- c("Treated" = "black", "Untreated" = "blue")
+# Add the lines to the graph:
 
 
 ggplot()+
@@ -219,18 +201,12 @@ geom_path(data=untreatedStats, mapping=aes(x=time, y=Average))
 
 
 
-
-
-
-
-
 Now we can clean up the plot by adjusting our x- and y- axes with the xlim() and ylim() functions. Each function takes a minimum and maximum (e.g. +ylim(0, 10)).  Make sure your upper limit is high enough to include all data points and error bars.
 
 ```{r}
 
 # Adjust your axes with the xlim and ylim functions. Edit the values those functions below to improve your plot.
 
-# ggplot(data=myStats, mapping=aes(x=time,y=Average))+geom_point()+geom_errorbar(mapping=aes(ymin=lowerCI, ymax=upperCI), width=5)+geom_path(mapping=aes(x=time,y=Average))+xlim(0,100)+ylim(0,10)
 ggplot()+
 geom_point(data=treatedStats, mapping=aes(x=time, y=Average, shape="Treated"), size=5)+
 geom_errorbar(data=treatedStats, mapping=aes(x=time, ymin=lowerCI, ymax=upperCI), width=5)+
@@ -245,7 +221,7 @@ xlim(c(0,90))+ylim(c(0,8))
 ```
 
 
-Finally, add some labels using the labs() function:
+Finally, add some labels using the labs() function. You can overwrite the "shape" title on the legend by using "shape='my title'"
 
 ```{r}
 
